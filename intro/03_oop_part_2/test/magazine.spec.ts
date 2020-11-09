@@ -1,6 +1,6 @@
-import {Pages} from "../src/pages";
-import {Page} from "../src/page";
-import {Magazine} from "../src/magazine";
+import {Pages} from '../src/pages';
+import {Page} from '../src/page';
+import {Magazine} from '../src/magazine';
 
 describe('Magazine', () => {
   it('toString should return correct value', () => {
@@ -10,6 +10,7 @@ describe('Magazine', () => {
       new Page(2, 'with article', 'glossy paper')
     ]));
 
+    // @ts-ignore
     for (const page of magazine) {
       expect(page.toString()).toEqual(`Magazine: G.Q with number of pages: 2, here is page with article #${counter} and it\'s material is glossy paper`);
       counter++;
