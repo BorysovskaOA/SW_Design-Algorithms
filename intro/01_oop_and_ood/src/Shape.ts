@@ -3,8 +3,8 @@ import { Point } from './Point';
 export abstract class Shape {
   abstract getType(): string;
 
-  private readonly color: string = 'green';
-  private readonly filled: boolean = true;
+  private readonly color: string;
+  private readonly filled: boolean;
   public points: Point[] = [];
 
   constructor(points: Point[])
@@ -16,13 +16,8 @@ export abstract class Shape {
 
     this.points = points;
 
-    if (color) {
-      this.color = color;
-    }
-
-    if (typeof filled === 'boolean') {
-      this.filled = filled;
-    }
+    this.color = color || 'green';
+    this.filled = typeof filled === 'boolean' ? filled : true
   }
 
     public toString() {
@@ -41,17 +36,10 @@ export abstract class Shape {
     }
 
     public getSides() {
-      const sides = [];
-
-      // tslint:disable-next-line:no-increment-decrement
-      for (let i = 0; i < this.points.length; i++) {
-        const nextIndex = i === this.points.length - 1 ? 0 : i + 1;
-        const side = this.points[i].distance(this.points[nextIndex]);
-
-        sides.push(side);
-      }
-
-      return sides;
+      return this.points.map((el: Point, index: number, array: Point[]) => {
+        const nextIndex = index === array.length - 1 ? 0 : index + 1
+        return this.points[index].distance(this.points[nextIndex]);
+      });
     }
 }
 
