@@ -1,6 +1,7 @@
 import { Point } from './Point';
 import { Shape } from './Shape';
 
+// @ts-ignore
 export class Triangle extends Shape {
   constructor(points: Point[])
   constructor(point1: Point, point2: Point, point3: Point);
@@ -35,6 +36,13 @@ export class Triangle extends Shape {
       default:
         return 'scalene triangle';
     }
+  }
+
+  private getSides() {
+    return this.points.map((el: Point, index: number, array: Point[]) => {
+      const nextIndex = index === array.length - 1 ? 0 : index + 1
+      return this.points[index].distance(this.points[nextIndex]);
+    });
   }
 
   private getMaxEqualSidesCount(sides: number[]) {

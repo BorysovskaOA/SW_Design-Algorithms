@@ -35,7 +35,7 @@ export abstract class Shape {
       return sides.reduce((acc: number, side: number) => acc + side);
     }
 
-    public getSides() {
+    private getSides() {
       return this.points.map((el: Point, index: number, array: Point[]) => {
         const nextIndex = index === array.length - 1 ? 0 : index + 1
         return this.points[index].distance(this.points[nextIndex]);
