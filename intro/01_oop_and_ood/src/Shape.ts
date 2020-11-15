@@ -8,7 +8,6 @@ export abstract class Shape {
   public points: Point[] = [];
 
   constructor(points: Point[])
-  constructor(points: Point[], color?: string, filled?: boolean)
   constructor(points: Point[], color?: string, filled?: boolean) {
     if (points.length < 3) {
       throw new Error('Not enough points for a shape');
