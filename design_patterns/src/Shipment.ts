@@ -1,10 +1,14 @@
 import { ShipmentState } from './ShipmentState';
+import { Shipper } from './shippers/Shipper';
+import { PacificParcelShipper } from './shippers/PacificParcelShipper';
+import { ChicagoSprintShipper } from './shippers/ChicagoSprintShipper';
+import { AirEastShipper } from './shippers/AirEastShipper';
 
-const SHIPMENT_PRICE_PER_OUNCE = 0.39;
 let shipmentId = 1;
 
 export class Shipment {
   private state: ShipmentState;
+  private shipper: Shipper;
 
   public constructor(state: ShipmentState) {
     this.state = state.shipmentId === 0
@@ -13,7 +17,7 @@ export class Shipment {
         shipmentId: Shipment.getShipmentId(),
       }
       : state;
-
+    this.shipper = this.getShipperByFromZipCode(state.fromZipCode);
   }
 
   public static getShipmentId() {
@@ -37,7 +41,26 @@ export class Shipment {
   }
 
   private getPrice() {
-    return (this.state.weight * SHIPMENT_PRICE_PER_OUNCE).toFixed(2);
+    return this.shipper.getCost(this.state.weight);
+  }
+
+  private getShipperByFromZipCode(fromZipCode?: string) {
+    if (!fromZipCode) {
+      return new AirEastShipper();
+    }
+
+    switch (fromZipCode.charAt(0)) {
+      case '9':
+      case '8':
+      case '7':
+        return new PacificParcelShipper();
+      case '6':
+      case '5':
+      case '4':
+        return new ChicagoSprintShipper();
+      default:
+        return new AirEastShipper()
+    }
   }
 
   public changeFromAddress(address: string) {
@@ -46,6 +69,7 @@ export class Shipment {
 
   public changeFromZipCode(zipCode: string) {
     this.state.fromZipCode = zipCode;
+    this.shipper = this.getShipperByFromZipCode(zipCode);
   }
 
   public changeToAddress(address: string) {
