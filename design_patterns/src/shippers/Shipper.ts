@@ -1,3 +1,5 @@
 export abstract class Shipper {
-  public abstract getCost(weight: number);
+  public abstract getLetterCost(weight: number): string;
+  public abstract getPackageCost(weight: number): string;
+  public abstract getOversizedCost(weight: number): string;
 }
