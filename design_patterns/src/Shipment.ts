@@ -1,14 +1,15 @@
 import { ShipmentState } from './ShipmentState';
-import { Shipper } from './shippers/Shipper';
-import { PacificParcelShipper } from './shippers/PacificParcelShipper';
-import { ChicagoSprintShipper } from './shippers/ChicagoSprintShipper';
-import { AirEastShipper } from './shippers/AirEastShipper';
+import { ShipperStrategy } from './shippers/ShipperStrategy';
+import { PacificParcelShipperStrategy } from './shippers/PacificParcelShipperStrategy';
+import { ChicagoSprintShipperStrategy } from './shippers/ChicagoSprintShipperStrategy';
+import { AirEastShipperStrategy } from './shippers/AirEastShipperStrategy';
+import { ShipperContext } from './shippers/ShipperContext';
 
 let shipmentId = 1;
 
 export class Shipment {
   private state: ShipmentState;
-  private shipper: Shipper;
+  private shipper: ShipperStrategy;
 
   public constructor(state: ShipmentState) {
     this.state = state.shipmentId === 0
@@ -17,7 +18,6 @@ export class Shipment {
         shipmentId: Shipment.getShipmentId(),
       }
       : state;
-    this.shipper = this.getShipperByFromZipCode(state.fromZipCode);
   }
 
   public static getShipmentId() {
@@ -41,25 +41,26 @@ export class Shipment {
   }
 
   private getPrice() {
-    return this.shipper.getCost(this.state.weight);
+    const context = new ShipperContext(this.getShipperByFromZipCode(this.state.fromZipCode));
+    return context.execute(this.state.weight);
   }
 
-  private getShipperByFromZipCode(fromZipCode?: string) {
+  private getShipperByFromZipCode(fromZipCode?: string): ShipperStrategy {
     if (!fromZipCode) {
-      return new AirEastShipper();
+      return new AirEastShipperStrategy();
     }
 
     switch (fromZipCode.charAt(0)) {
       case '9':
       case '8':
       case '7':
-        return new PacificParcelShipper();
+        return new PacificParcelShipperStrategy();
       case '6':
       case '5':
       case '4':
-        return new ChicagoSprintShipper();
+        return new ChicagoSprintShipperStrategy();
       default:
-        return new AirEastShipper()
+        return new AirEastShipperStrategy()
     }
   }
 
@@ -69,7 +70,6 @@ export class Shipment {
 
   public changeFromZipCode(zipCode: string) {
     this.state.fromZipCode = zipCode;
-    this.shipper = this.getShipperByFromZipCode(zipCode);
   }
 
   public changeToAddress(address: string) {
