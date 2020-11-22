@@ -36,7 +36,7 @@ const package13: ShipmentState = {
   toAddress: 'Kiev',
   toZipCode: '23456',
   weight: 3.25,
-  marks: ['mark1', 'mark2']
+  marks: ['mark1', 'Fragile']
 }
 
 gui.trigger('ship', package13);
