@@ -1,0 +1,53 @@
+Used Project: https://github.com/typeorm/typeorm
+
+Correctly used SOLID principles:
+
+1. Single Responsibility Principle:
+ - https://github.com/typeorm/typeorm/blob/master/src/logger/LoggerFactory.ts
+ - whole class
+ - It's only responsibility is to create Logger.
+
+2. Open / Closed Principle:
+ - https://github.com/typeorm/typeorm/tree/master/src/driver
+ - Mostly https://github.com/typeorm/typeorm/blob/master/src/driver/DriverFactory.ts in this folder
+ - If new Driver needs to be added it just adds a new case and separate file.
+
+3. Liskov Substitution Principle:
+
+4. Interface segregation Principle:
+
+5. Dependency Inversion Principle:
+ - https://github.com/typeorm/typeorm/tree/master/src/subscriber
+ - all folder
+ - It has interfaces written next to the files that depends on it.
+
+
+Violations of SOLID principles:
+
+1. Single Responsibility Principle:
+ - https://github.com/typeorm/typeorm/blob/master/src/connection/Connection.ts
+ - all class
+ - Has too many things to do: creates/closes connections to db, runs migrations, transactions etc.
+
+2. Open / Closed Principle:
+ - https://github.com/typeorm/typeorm/blob/master/src/connection/Connection.ts
+ - lines: 141-164, 342-373
+ - Has special methods for specific db. If there is special types of connections like SQL and Mongo connections there would be no need to always check for the right connection and throw errors if it has no right to call it.
+
+3. Liskov Substitution Principle:
+ - https://github.com/typeorm/typeorm/blob/master/src/entity-manager/EntityManager.ts
+ - lines: 510-546
+ - https://github.com/typeorm/typeorm/blob/master/src/entity-manager/MongoEntityManager.ts
+ - lines: 237-254
+ - Child does not check for empty entity
+
+4. Interface segregation Principle:
+ - https://github.com/typeorm/typeorm/blob/master/src/cache/QueryResultCache.ts
+ - lines: 9-22
+ - https://github.com/typeorm/typeorm/blob/master/src/cache/DbQueryResultCache.ts
+ - lines: 41-51
+ - https://github.com/typeorm/typeorm/blob/master/src/cache/RedisQueryResultCache.ts
+ - lines: 87-91
+ - Interface includes all 3 methods: connect, disconnect and synchronize. But for DbQueryResultCache it uses connect and disconnect methods only while RedisQueryResultCache uses synchronize method only.
+
+5. Dependency Inversion Principle:
