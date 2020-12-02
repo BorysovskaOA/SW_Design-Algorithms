@@ -1,10 +1,15 @@
 import { ShipmentState } from './ShipmentState';
+import { ShipperStrategy } from './shippers/ShipperStrategy';
+import { PacificParcelShipperStrategy } from './shippers/PacificParcelShipperStrategy';
+import { ChicagoSprintShipperStrategy } from './shippers/ChicagoSprintShipperStrategy';
+import { AirEastShipperStrategy } from './shippers/AirEastShipperStrategy';
+import { ShipperContext } from './shippers/ShipperContext';
 
-const SHIPMENT_PRICE_PER_OUNCE = 0.39;
 let shipmentId = 1;
 
 export class Shipment {
   private state: ShipmentState;
+  private shipper: ShipperStrategy;
 
   public constructor(state: ShipmentState) {
     this.state = state.shipmentId === 0
@@ -13,7 +18,6 @@ export class Shipment {
         shipmentId: Shipment.getShipmentId(),
       }
       : state;
-
   }
 
   public static getShipmentId() {
@@ -37,7 +41,27 @@ export class Shipment {
   }
 
   private getPrice() {
-    return (this.state.weight * SHIPMENT_PRICE_PER_OUNCE).toFixed(2);
+    const context = new ShipperContext(this.getShipperByFromZipCode(this.state.fromZipCode));
+    return context.execute(this.state.weight);
+  }
+
+  private getShipperByFromZipCode(fromZipCode?: string): ShipperStrategy {
+    if (!fromZipCode) {
+      return new AirEastShipperStrategy();
+    }
+
+    switch (fromZipCode.charAt(0)) {
+      case '9':
+      case '8':
+      case '7':
+        return new PacificParcelShipperStrategy();
+      case '6':
+      case '5':
+      case '4':
+        return new ChicagoSprintShipperStrategy();
+      default:
+        return new AirEastShipperStrategy()
+    }
   }
 
   public changeFromAddress(address: string) {
