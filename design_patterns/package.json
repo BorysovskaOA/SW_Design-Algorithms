@@ -1,0 +1,12 @@
+{
+  "name": "04_design_patterns",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^8.10.2",
+    "typescript": "^4.0.3"
+  }
+}
