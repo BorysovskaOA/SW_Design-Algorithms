@@ -2,6 +2,7 @@ export const applyMarks = (target: Object, propertyKey: string, descriptor: Prop
   const originalValue = descriptor.value;
 
   descriptor.value = function (...args: any[]) {
+    // @ts-ignore
     const marksToApply = this.state.marks.reduce((acc: [], mark: string) => {
       if (mark === 'Fragile') {
         return [

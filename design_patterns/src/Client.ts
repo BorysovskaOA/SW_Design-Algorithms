@@ -15,7 +15,7 @@ export class Client {
     console.log(shipment.ship());
   }
 
-  private static getShipment(state) {
+  private static getShipment(state: ShipmentState) {
     if (state.weight <= 15) {
       return new Letter(state);
     }
