@@ -8,7 +8,7 @@ export class ShipperContext {
     this.strategy = strategy;
   }
 
-  public execute(weight: number) {
-    return this.strategy.getCost(weight);
+  public execute(weight: number, type: 'letter' | 'package' | 'oversized') {
+    return this.strategy.getCost(weight, type);
   }
 }

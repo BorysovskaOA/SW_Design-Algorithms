@@ -1,15 +1,15 @@
-import { ShipmentState } from './ShipmentState';
-import { ShipperStrategy } from './shippers/ShipperStrategy';
-import { PacificParcelShipperStrategy } from './shippers/PacificParcelShipperStrategy';
-import { ChicagoSprintShipperStrategy } from './shippers/ChicagoSprintShipperStrategy';
-import { AirEastShipperStrategy } from './shippers/AirEastShipperStrategy';
-import { ShipperContext } from './shippers/ShipperContext';
+import { ShipmentState } from '../ShipmentState';
+import { ShipperStrategy } from '../shippers/ShipperStrategy';
+import { PacificParcelShipperStrategy } from '../shippers/PacificParcelShipperStrategy';
+import { ChicagoSprintShipperStrategy } from '../shippers/ChicagoSprintShipperStrategy';
+import { AirEastShipperStrategy } from '../shippers/AirEastShipperStrategy';
 
 let shipmentId = 1;
 
-export class Shipment {
+export abstract class Shipment {
+  protected abstract getPrice(): string;
+
   private state: ShipmentState;
-  private shipper: ShipperStrategy;
 
   public constructor(state: ShipmentState) {
     this.state = state.shipmentId === 0
@@ -40,12 +40,7 @@ export class Shipment {
     }$`
   }
 
-  private getPrice() {
-    const context = new ShipperContext(this.getShipperByFromZipCode(this.state.fromZipCode));
-    return context.execute(this.state.weight);
-  }
-
-  private getShipperByFromZipCode(fromZipCode?: string): ShipperStrategy {
+  protected getShipperByFromZipCode(fromZipCode?: string): ShipperStrategy {
     if (!fromZipCode) {
       return new AirEastShipperStrategy();
     }
@@ -82,5 +77,13 @@ export class Shipment {
 
   public changeMarks(marks: string[]) {
     this.state.marks = marks;
+  }
+
+  public getWeight() {
+    return this.state.weight;
+  }
+
+  public getFromZipCode() {
+    return this.state.fromZipCode;
   }
 }
