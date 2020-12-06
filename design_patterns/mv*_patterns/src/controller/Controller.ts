@@ -77,7 +77,6 @@ export class Controller {
   }
 
   private onModelChange = (type: ModelType) => {
-    console.log(this.initialCurrencyAmount);
     if (type === ModelType.IndependentAmount) {
       this.modelContext.setStrategy(new IndependentAmountModelStrategy(this.initialCurrencyAmount));
     } else {
