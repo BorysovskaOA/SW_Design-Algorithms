@@ -3,11 +3,11 @@ import { ShipperStrategy } from '../shippers/ShipperStrategy';
 import { PacificParcelShipperStrategy } from '../shippers/PacificParcelShipperStrategy';
 import { ChicagoSprintShipperStrategy } from '../shippers/ChicagoSprintShipperStrategy';
 import { AirEastShipperStrategy } from '../shippers/AirEastShipperStrategy';
-import { applyMarks } from './ShipmentMarksDecorator';
+import { ShipmentInterface } from './ShipmentInterface';
 
 let shipmentId = 1;
 
-export abstract class Shipment {
+export abstract class Shipment implements ShipmentInterface {
   protected abstract getPrice(): string;
 
   private state: ShipmentState;
@@ -25,7 +25,6 @@ export abstract class Shipment {
     return shipmentId++;
   }
 
-  @applyMarks
   public ship() {
     return `Package with shipmentId ${
       this.state.shipmentId
