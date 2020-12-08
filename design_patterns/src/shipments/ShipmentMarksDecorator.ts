@@ -1,8 +1,7 @@
-import { Shipment } from './Shipment';
-import { ShipmentInterface } from './ShipmentInterface';
+import { Shippable } from './Shippable';
 
-export class ShipmentMarksDecorator implements ShipmentInterface{
-  constructor(private wrappee: Shipment, private marks: string[]) {
+export class ShipmentMarksDecorator {
+  constructor(private wrappee: Shippable, private marks: string[]) {
   }
 
   public ship() {
@@ -39,34 +38,5 @@ export class ShipmentMarksDecorator implements ShipmentInterface{
       },
       []
     );
-  }
-
-  public changeFromAddress(address: string) {
-    this.wrappee.changeFromAddress(address)
-  }
-
-  public changeToAddress(address: string) {
-    this.wrappee.changeToAddress(address)
-  }
-
-  public changeFromZipCode(zipCode: string) {
-    this.wrappee.changeFromZipCode(zipCode);
-  }
-
-  public changeToZipCode(zipCode: string) {
-    this.wrappee.changeToZipCode(zipCode);
-  }
-
-  public changeMarks(marks: string[]) {
-    this.marks = marks;
-    this.wrappee.changeMarks(marks);
-  }
-
-  public getWeight() {
-    return this.wrappee.getWeight();
-  }
-
-  public getFromZipCode() {
-    return this.wrappee.getFromZipCode()
   }
 }

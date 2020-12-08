@@ -80,11 +80,11 @@ export abstract class Shipment implements ShipmentInterface {
     this.state.marks = marks;
   }
 
-  public getWeight() {
+  protected getWeight() {
     return this.state.weight;
   }
 
-  public getFromZipCode() {
+  protected getFromZipCode() {
     return this.state.fromZipCode;
   }
 }
