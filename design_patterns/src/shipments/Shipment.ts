@@ -3,10 +3,11 @@ import { ShipperStrategy } from '../shippers/ShipperStrategy';
 import { PacificParcelShipperStrategy } from '../shippers/PacificParcelShipperStrategy';
 import { ChicagoSprintShipperStrategy } from '../shippers/ChicagoSprintShipperStrategy';
 import { AirEastShipperStrategy } from '../shippers/AirEastShipperStrategy';
+import { ShipmentInterface } from './ShipmentInterface';
 
 let shipmentId = 1;
 
-export abstract class Shipment {
+export abstract class Shipment implements ShipmentInterface {
   protected abstract getPrice(): string;
 
   private state: ShipmentState;
@@ -79,11 +80,11 @@ export abstract class Shipment {
     this.state.marks = marks;
   }
 
-  public getWeight() {
+  protected getWeight() {
     return this.state.weight;
   }
 
-  public getFromZipCode() {
+  protected getFromZipCode() {
     return this.state.fromZipCode;
   }
 }
